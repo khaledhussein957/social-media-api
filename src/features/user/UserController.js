@@ -18,7 +18,7 @@ dotenv.config();
       });
       res.send({ message: 'User registered successfully', user });      
     } catch (error) {
-      res.status(400).send(' error ' , error.message);
+      res.status(400).send(' error ' , error.message );
     }
   }
 
