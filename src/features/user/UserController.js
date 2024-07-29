@@ -1,6 +1,9 @@
 import UserRepository from './UserRepository.js';
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 class UserController {
   async register(req, res) {
@@ -36,7 +39,17 @@ class UserController {
       const token = jwt.sign({ userId: user._id }, process.env.SECRET_KEY, {
         expiresIn: "1h",
       });
-      res.send({ token });
+
+      // set the token as a cookie
+      res.cookie("token", token, {
+        httpOnly: true,
+        secure: true,
+        sameSite: "strict",
+        maxAge: 3600000, // 1 hour
+      });
+
+      res.send({ token }); 
+      res.json({ message: "Logged in successfully" });
     } catch (error) {
       res.status(400).send(error.message);
     }
