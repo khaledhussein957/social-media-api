@@ -2,7 +2,7 @@
 import Friendship from "./FriendshipSchema.js";
 
 
-  export const createFriendship = async (userId, friendId) => {
+  export const follow = async (userId, friendId) => {
     const friendship = new Friendship({ userId, friendId });
     return await friendship.save();
   }
@@ -15,6 +15,6 @@ import Friendship from "./FriendshipSchema.js";
     return await Friendship.findByIdAndUpdate(id, { status }, { new: true });
   }
 
-  export const deleteFriendship = async (id) => {
+  export const unfollow = async (id) => {
     return await Friendship.findByIdAndRemove(id);
   }

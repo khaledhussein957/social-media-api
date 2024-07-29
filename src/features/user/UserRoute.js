@@ -6,11 +6,11 @@ import jwtAuth from "../../middleware/jwtAuht.js";
 
 const router = express.Router();
 
-router.post("/register", registerUser);
-router.post("/login", loginUser);
-router.get("/profile" , getProfile);
-router.get("/all", GetAllUsers);
-router.put("/profile" , updateProfile);
-router.delete("/profile" , deleteProfile);
+router.post("/register-user", registerUser);
+router.post("/login-user", loginUser);
+router.get(`/profile/${id}` , getProfile);
+router.get("/all-user", GetAllUsers);
+router.put(`/update-profile/${id}` , updateProfile);
+router.delete(`/delete-profile/${id}` , deleteProfile);
 
 export default router;

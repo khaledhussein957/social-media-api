@@ -15,10 +15,10 @@ app.use(express.json());
 app.use(cookieParser());
 
 
-app.use("/api/users" , userRoute);
-app.use("/api/posts", jwtAuth , postRoute);
-app.use("/api/comments", jwtAuth , commentRoute);
-app.use("/api/friendships", jwtAuth , friendshipRoute);
+app.use("/api" , userRoute);
+app.use("/api", jwtAuth , postRoute);
+app.use("/api", jwtAuth , commentRoute);
+app.use("/api", jwtAuth , friendshipRoute);
 
 
 

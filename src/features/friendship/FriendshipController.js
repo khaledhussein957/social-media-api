@@ -1,10 +1,10 @@
-import {createFriendship, getFriendships, updateFriendship, deleteFriendship} from "./FriendshipRepository.js";
+import {follow, getFriendships, updateFriendship, unfollow} from "./FriendshipRepository.js";
 
 
   export const CreateFriendship = async (req, res) => {
     try {
       const { userId, friendId } = req.body;
-      const friendship = await this.createFriendship(userId, friendId);
+      const friendship = await follow(userId, friendId);
       res.status(201).json(friendship);
     } catch (error) {
       res.status(500).json({ message: "Error creating friendship" });
@@ -14,7 +14,7 @@ import {createFriendship, getFriendships, updateFriendship, deleteFriendship} fr
   export const GetFriendships = async (req, res) => {
     try {
       const userId = req.userID;
-      const friendships = await this.getFriendships(userId);
+      const friendships = await getFriendships(userId);
       res.status(200).json(friendships);
     } catch (error) {
       res.status(500).json({ message: "Error getting friendships" });
@@ -25,7 +25,7 @@ import {createFriendship, getFriendships, updateFriendship, deleteFriendship} fr
     try {
       const id = req.params.id;
       const status = req.body.status;
-      const friendship = await this.updateFriendship(id, status);
+      const friendship = await updateFriendship(id, status);
       res.status(200).json(friendship);
     } catch (error) {
       res.status(500).json({ message: "Error updating friendship" });
@@ -35,7 +35,7 @@ import {createFriendship, getFriendships, updateFriendship, deleteFriendship} fr
   export const DeleteFriendship = async (req, res) => {
     try {
       const id = req.params.id;
-      await this.deleteFriendship(id);
+      await unfollow(id);
       res.status(204).json({ message: "Friendship deleted successfully" });
     } catch (error) {
       res.status(500).json({ message: "Error deleting friendship" });
