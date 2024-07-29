@@ -1,52 +1,48 @@
-import CommentRepository from "./CommentRepository.js";
+import {createComment, getComment, getComments, updateComment, deleteComment} from "./CommentRepository.js";
 
-const commentRepository = new CommentRepository();
 
-class CommentController {
-  async createComment(req, res) {
+
+  export const CreateComment = async (req, res) => {
     try {
-      const comment = await commentRepository.createComment(req.body);
+      const comment = await createComment(req.body);
       res.status(201).json(comment);
     } catch (error) {
       res.status(500).json({ message: "Error creating comment" });
     }
   }
 
-  async getComments(req, res) {
+  export const GetComments = async (req, res) => {
     try {
-      const comments = await commentRepository.getComments();
+      const comments = await getComments();
       res.status(200).json(comments);
     } catch (error) {
       res.status(500).json({ message: "Error getting comments" });
     }
   }
 
-  async getComment(req, res) {
+  export const GetComment = async (req, res) => {
     try {
-      const comment = await commentRepository.getComment(req.params.id);
+      const comment = await getComment(req.params.id);
       res.status(200).json(comment);
     } catch (error) {
       res.status(404).json({ message: "Comment not found" });
     }
   }
 
-  async updateComment(req, res) {
+  export const UpdateComment = async (req, res) => {
     try {
-      const comment = await commentRepository.updateComment(req.params.id, req.body);
+      const comment = await updateComment(req.params.id, req.body);
       res.status(200).json(comment);
     } catch (error) {
       res.status(404).json({ message: "Comment not found" });
     }
   }
 
-  async deleteComment(req, res) {
+  export const DeleteComment = async (req, res) => {
     try {
-      await commentRepository.deleteComment(req.params.id);
+      await deleteComment(req.params.id);
       res.status(204).json({ message: "Comment deleted" });
     } catch (error) {
       res.status(404).json({ message: "Comment not found" });
     }
   }
-}
-
-export default new CommentController();

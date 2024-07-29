@@ -1,12 +1,12 @@
 import express from "express";
-import { createFriendship , getFriendships, updateFriendship, deleteFriendship} from "./FriendshipController.js";
+import {CreateFriendship, GetFriendships, UpdateFriendship, DeleteFriendship} from "./FriendshipController.js";
 
-const FriendshipRoute = express.Router();
+const router = express.Router();
 
 
-FriendshipRoute.post("/friendships", createFriendship);
-FriendshipRoute.get("/friendships", getFriendships);
-FriendshipRoute.put("/friendships/:id", updateFriendship);
-FriendshipRoute.delete("/friendships/:id", deleteFriendship);
+router.post("/friendships", CreateFriendship);
+router.get("/friendships", GetFriendships);
+router.put("/friendships/:id", UpdateFriendship);
+router.delete("/friendships/:id", DeleteFriendship);
 
-export default FriendshipRoute;
+export default router;

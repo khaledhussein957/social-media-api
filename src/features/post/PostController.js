@@ -1,52 +1,46 @@
-import PostRepository from './PostRepository.js';
+import {createPost, getPosts, getPost, updatePost, deletePost} from './PostRepository.js';
 
-const postRepository = new PostRepository();
-
-class PostController {
-  async createPost(req, res) {
+  export const CreatePost = async (req, res) => {
     try {
-      const post = await postRepository.createPost(req.body);
+      const post = await createPost(req.body);
       res.status(201).json(post);
     } catch (error) {
       res.status(500).json({ message: "Error creating post" });
     }
   }
 
-  async getPosts(req, res) {
+  export const GetPosts = async (req, res) => {
     try {
-      const posts = await postRepository.getPosts();
+      const posts = await getPosts();
       res.status(200).json(posts);
     } catch (error) {
       res.status(500).json({ message: "Error getting posts" });
     }
   }
 
-  async getPost(req, res) {
+  export const GetPost = async (req, res) => {
     try {
-      const post = await postRepository.getPost(req.params.id);
+      const post = await getPost(req.params.id);
       res.status(200).json(post);
     } catch (error) {
       res.status(404).json({ message: "Post not found" });
     }
   }
 
-  async updatePost(req, res) {
+  export const UpdatePost = async (req, res) => {
     try {
-      const post = await postRepository.updatePost(req.params.id, req.body);
+      const post = await updatePost(req.params.id, req.body);
       res.status(200).json(post);
     } catch (error) {
       res.status(404).json({ message: "Post not found" });
     }
   }
 
-  async deletePost(req, res) {
+  export const DeletePost = async(req, res) => {
     try {
-      await postRepository.deletePost(req.params.id);
+      await deletePost(req.params.id);
       res.status(204).json({ message: "Post deleted" });
     } catch (error) {
       res.status(404).json({ message: "Post not found" });
     }
   }
-}
-
-export default new PostController();

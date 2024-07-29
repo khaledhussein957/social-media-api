@@ -1,28 +1,24 @@
-import db from '../../config/DBConfig.js'
+import mongoose from 'mongoose';
 import userSchema from './UserSchema.js';
 
-const User = db.model("User", userSchema);
+const User = mongoose.model("User", userSchema);
 
-class UserRepository {
-  async createUser(user) {
+  export const createUser = async (user) => {
     return await User.create(user);
   }
 
-  async getUserByEmail(email) {
+  export const getUserByEmail = async (email) => {
     return await User.findOne({ email });
   }
 
-  async getUserById(id) {
+  export const getUserById = async (id) => {
     return await User.findById(id);
   }
 
-  async updateUser(id, user) {
+  export const updateUser = async (id, user) => {
     return await User.findByIdAndUpdate(id, user, { new: true });
   }
 
-  async deleteUser(id) {
+  export const deleteUser = async (id) => {
     return await User.findByIdAndDelete(id);
   }
-}
-
-export default UserRepository;

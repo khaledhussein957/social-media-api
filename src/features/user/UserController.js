@@ -1,31 +1,28 @@
-import UserRepository from './UserRepository.js';
+import {createUser} from './UserRepository.js';
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import dotenv from 'dotenv';
 
 dotenv.config();
 
-class UserController {
-  async register(req, res) {
+
+  export const registerUser = async (req, res) => {
     try {
       const { firstName, lastName, email, password } = req.body;
       const hashedPassword = await bcrypt.hash(password, 10);
-      const user = await UserRepository.createUser({
+      const user = await createUser({
         firstName,
         lastName,
         email,
         password: hashedPassword,
       });
-      const token = jwt.sign({ userId: user._id }, process.env.SECRET_KEY, {
-        expiresIn: "1h",
-      });
-      res.send({ token });
+      res.send({ message: 'User registered successfully', user });      
     } catch (error) {
-      res.status(400).send(error.message);
+      res.status(400).send(' error ' , error.message);
     }
   }
 
-  async login(req, res) {
+  export const loginUser = async (req, res) => {
     try {
       const { email, password } = req.body;
       const user = await UserRepository.getUserByEmail(email);
@@ -55,7 +52,7 @@ class UserController {
     }
   }
 
-  async getProfile(req, res) {
+  export const getProfile = async (req, res) => {
     try {
       const user = await UserRepository.getUserById(req.user.userId);
       res.send(user);
@@ -64,7 +61,7 @@ class UserController {
     }
   }
 
-  async updateProfile(req, res) {
+  export const updateProfile = async (req, res) => {
     try {
       const user = await UserRepository.updateUser(req.user.userId, req.body);
       res.send(user);
@@ -73,7 +70,7 @@ class UserController {
     }
   }
 
-  async deleteProfile(req, res) {
+  export const deleteProfile = async (req, res) => {
     try {
       await UserRepository.deleteUser(req.user.userId);
       res.send({ message: "User deleted successfully" });
@@ -81,6 +78,3 @@ class UserController {
       res.status(400).send(error.message);
     }
   }
-}
-
-export default UserController;

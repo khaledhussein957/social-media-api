@@ -1,22 +1,20 @@
+// import { createFriendship, deleteFriendship, getFriendships, updateFriendship } from "./FriendshipController.js";
 import Friendship from "./FriendshipSchema.js";
 
-class FriendshipRepository {
-  async createFriendship(userId, friendId) {
+
+  export const createFriendship = async (userId, friendId) => {
     const friendship = new Friendship({ userId, friendId });
     return await friendship.save();
   }
 
-  async getFriendships(userId) {
+  export const getFriendships = async (userId) => {
     return await Friendship.find({ userId }).populate("friendId");
   }
 
-  async updateFriendship(id, status) {
+  export const updateFriendship = async (id, status) => {
     return await Friendship.findByIdAndUpdate(id, { status }, { new: true });
   }
 
-  async deleteFriendship(id) {
+  export const deleteFriendship = async (id) => {
     return await Friendship.findByIdAndRemove(id);
   }
-}
-
-export default new FriendshipRepository();

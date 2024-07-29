@@ -1,25 +1,22 @@
+// import { createComment, deleteComment, getComment, getComments, updateComment } from "./CommentController.js";
 import Comment from "./CommentSchema.js";
 
-class CommentRepository {
-  async createComment(comment) {
+  export const createComment = async (comment) => {
     return await Comment.create(comment);
   }
 
-  async getComments() {
+  export const getComments = async () => {
     return await Comment.find().sort({ createdAt: -1 });
   }
 
-  async getComment(id) {
+  export const getComment = async (id) => {
     return await Comment.findById(id);
   }
 
-  async updateComment(id, comment) {
+  export const updateComment = async (id, comment) => {
     return await Comment.findByIdAndUpdate(id, comment, { new: true });
   }
 
-  async deleteComment(id) {
+  export const deleteComment = async (id) => {
     return await Comment.findByIdAndDelete(id);
   }
-}
-
-export default new CommentRepository();
