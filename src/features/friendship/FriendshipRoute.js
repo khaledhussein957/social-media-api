@@ -3,6 +3,8 @@ import {CreateFriendship, GetFriendships, UpdateFriendship, DeleteFriendship} fr
 
 const router = express.Router();
 
+// router.use(jwtAuth); // apply jwtAuth middleware to all routes
+
 
 router.post("/friendships", CreateFriendship);
 router.get("/friendships", GetFriendships);

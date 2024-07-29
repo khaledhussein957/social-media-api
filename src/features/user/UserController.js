@@ -1,4 +1,4 @@
-import {createUser} from './UserRepository.js';
+import {createUser, getUserByEmail, getUserById, updateUser, deleteUser} from './UserRepository.js';
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import dotenv from 'dotenv';
@@ -25,7 +25,7 @@ dotenv.config();
   export const loginUser = async (req, res) => {
     try {
       const { email, password } = req.body;
-      const user = await UserRepository.getUserByEmail(email);
+      const user = await getUserByEmail(email);
       if (!user) {
         return res.status(401).send("Invalid email or password");
       }
@@ -45,8 +45,7 @@ dotenv.config();
         maxAge: 3600000, // 1 hour
       });
 
-      res.send({ token }); 
-      res.json({ message: "Logged in successfully" });
+      res.status(200).json({ message: 'Logged in successfully', token });
     } catch (error) {
       res.status(400).send(error.message);
     }
@@ -54,7 +53,7 @@ dotenv.config();
 
   export const getProfile = async (req, res) => {
     try {
-      const user = await UserRepository.getUserById(req.user.userId);
+      const user = await getUserById(req.user.userId);
       res.send(user);
     } catch (error) {
       res.status(400).send(error.message);
@@ -63,7 +62,7 @@ dotenv.config();
 
   export const updateProfile = async (req, res) => {
     try {
-      const user = await UserRepository.updateUser(req.user.userId, req.body);
+      const user = await updateUser(req.user.userId, req.body);
       res.send(user);
     } catch (error) {
       res.status(400).send(error.message);
@@ -72,7 +71,7 @@ dotenv.config();
 
   export const deleteProfile = async (req, res) => {
     try {
-      await UserRepository.deleteUser(req.user.userId);
+      await deleteUser(req.user.userId);
       res.send({ message: "User deleted successfully" });
     } catch (error) {
       res.status(400).send(error.message);

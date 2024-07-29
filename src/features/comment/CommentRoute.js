@@ -3,6 +3,8 @@ import {CreateComment, GetComment, GetComments, UpdateComment, DeleteComment} fr
 
 const router = express.Router();
 
+// router.use(jwtAuth); // apply jwtAuth middleware to all routes
+
 router.post("/create", CreateComment);
 router.get("/all", GetComment);
 router.get("/:id", GetComments);
