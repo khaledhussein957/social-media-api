@@ -13,8 +13,8 @@ const commentSchema = new mongoose.Schema({
   },
   userID: {
     type: mongoose.Schema.Types.ObjectId,
-    ref:'User'
-},
+    ref: 'User'
+  },
   createdAt: {
     type: Date,
     default: Date.now,

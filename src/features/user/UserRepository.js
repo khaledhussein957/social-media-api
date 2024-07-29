@@ -11,6 +11,10 @@ const User = mongoose.model("User", userSchema);
     return await User.findOne({ email });
   }
 
+  export const getAllUsers = async () => {
+    return await User.find();
+  }
+
   export const getUserById = async (id) => {
     return await User.findById(id);
   }

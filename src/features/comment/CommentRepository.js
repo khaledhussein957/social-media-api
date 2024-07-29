@@ -1,7 +1,7 @@
-// import { createComment, deleteComment, getComment, getComments, updateComment } from "./CommentController.js";
 import Comment from "./CommentSchema.js";
 
-  export const createComment = async (comment) => {
+  export const createComment = async (content, postId, userId) => {
+    const comment = new Comment({ content, postId, userID: userId });
     return await Comment.create(comment);
   }
 

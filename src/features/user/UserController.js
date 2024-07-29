@@ -1,4 +1,4 @@
-import {createUser, getUserByEmail, getUserById, updateUser, deleteUser} from './UserRepository.js';
+import {createUser, getUserByEmail, getAllUsers, getUserById, updateUser, deleteUser} from './UserRepository.js';
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import dotenv from 'dotenv';
@@ -46,6 +46,15 @@ dotenv.config();
       });
 
       res.status(200).json({ message: 'Logged in successfully', token });
+    } catch (error) {
+      res.status(400).send(error.message);
+    }
+  }
+
+  export const GetAllUsers = async (req, res) => {
+    try {
+      const users = await getAllUsers(); // Call the function from UserRepository
+      res.send(users);
     } catch (error) {
       res.status(400).send(error.message);
     }
