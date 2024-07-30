@@ -5,7 +5,7 @@ const router = express.Router();
 
 // router.use(jwtAuth); // apply jwtAuth middleware to all routes
 
-router.post(`/posts/:tId/create-comment`, CreateComment);
+router.post(`/create-comment`, CreateComment);
 router.get("/all-comments", GetComment);
 router.get("/comments/:id", GetComments);
 router.put(`/posts/:Id/comments/:id`, UpdateComment);

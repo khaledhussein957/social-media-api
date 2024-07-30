@@ -6,8 +6,10 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 
+// register
   export const registerUser = async (req, res) => {
     try {
+
       const { firstName, lastName, email, password } = req.body;
       const hashedPassword = await bcrypt.hash(password, 10);
       const user = await createUser({
@@ -16,22 +18,48 @@ dotenv.config();
         email,
         password: hashedPassword,
       });
-      res.send({ message: 'User registered successfully', user });      
+
+      // check the password
+      if(!password || password.length < 8){
+
+        return res.json({
+          error : "Password must contains at least 8 character"
+        });
+      }
+
+      if(password.contains("123456789")){
+
+        return res.json({
+          error: "password must be strong one"
+        })
+      }
+
+      // check if email exist
+      const exitEmail = await getUserByEmail({email});
+      if(exitEmail){
+
+        return res.json({
+          error : "Email already taken..."
+        });
+      }
+
+      res.json({ message: 'User registered successfully', user });      
     } catch (error) {
       res.status(400).send(' error ' , error.message );
     }
   }
 
+  // login
   export const loginUser = async (req, res) => {
     try {
       const { email, password } = req.body;
       const user = await getUserByEmail(email);
       if (!user) {
-        return res.status(401).send("Invalid email or password");
+        return res.json({error: "Invalid email!"});
       }
       const isValidPassword = await bcrypt.compare(password, user.password);
       if (!isValidPassword) {
-        return res.status(401).send("Invalid email or password");
+        return res.json({error: "wrong password!"});
       }
       const token = jwt.sign({ userId: user._id }, process.env.SECRET_KEY, {
         expiresIn: "1h",
@@ -51,6 +79,7 @@ dotenv.config();
     }
   }
 
+  // get all
   export const GetAllUsers = async (req, res) => {
     try {
       const users = await getAllUsers(); // Call the function from UserRepository
@@ -60,6 +89,7 @@ dotenv.config();
     }
   }
 
+  // get profile
   export const getProfile = async (req, res) => {
     try {
       const user = await getUserById(req.user.userId);
@@ -69,6 +99,7 @@ dotenv.config();
     }
   }
 
+  // update profile
   export const updateProfile = async (req, res) => {
     try {
       const user = await updateUser(req.user.userId, req.body);
@@ -78,6 +109,7 @@ dotenv.config();
     }
   }
 
+  // delete profile
   export const deleteProfile = async (req, res) => {
     try {
       await deleteUser(req.user.userId);

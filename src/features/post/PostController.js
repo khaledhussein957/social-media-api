@@ -1,4 +1,5 @@
-import { createPost, getPosts, getPost, updatePost, deletePost } from './PostRepository.js';
+import express from 'express';
+import { createPost, getUserPost, getPosts, getPost, updatePost, deletePost } from './PostRepository.js';
 
 export const CreatePost = async (req, res) => {
   try {
@@ -14,6 +15,23 @@ export const CreatePost = async (req, res) => {
     res.status(201).json(post);
   } catch (error) {
     res.status(500).json({ message: "Error creating post" });
+  }
+}
+
+export const GetUserPost = async (req, res) => {
+  try {
+    const posts = await getUserPost({userID: req.cookies.userID})
+    .populate({
+      path: 'userID',
+      model: 'User',
+      select: 'firstName lastName email'
+    });
+
+    res.status(201).json(posts);
+
+
+  } catch (error) {
+    res.status(400).json(error.message);
   }
 }
 

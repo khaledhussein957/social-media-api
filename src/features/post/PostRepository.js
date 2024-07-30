@@ -4,7 +4,12 @@ import Post from "./PostSchema.js";
 
   export const createPost = async (content, userID) => {
     const post = new Post({ content, userID });
-    return await post.save();  }
+    return await post.save();  
+  }
+
+  export const getUserPost = async (id) => {
+    return await Post.find(id).sort({ createdAt: -1});
+  }
 
   export const getPosts = async () => {
     return await Post.find().sort({ createdAt: -1 });
