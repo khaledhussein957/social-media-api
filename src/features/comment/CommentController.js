@@ -1,20 +1,28 @@
-import { createComment, getComment, getComments, updateComment, deleteComment } from "./CommentRepository.js";
+import { createComment, getPostComments, getComment, getComments, updateComment, deleteComment } from "./CommentRepository.js";
 
 
 
 export const CreateComment = async (req, res) => {
   try {
-    const content = req.body;
-    const userID = req.cookies.userID;
-    const postId = req.params.postId;
+    const {content, authorID, postId} = req.body;
 
     if (!userID) {
       return res.status(401).json({ message: "Unauthorized" });
     }
-    const comment = await createComment(content, postId, userID);
+    const comment = await createComment(content, postId, authorID);
     res.status(201).json(comment);
   } catch (error) {
     res.status(500).json({ message: "Error creating comment" });
+  }
+}
+
+export const GetPostComments = async (req, res) => {
+  const { postId } = req.params;
+  try {
+    const comments = await getPostComments(postId);
+    res.status(200).send(comments);
+  } catch (error) {
+    res.status(400).send({ message: error.message });
   }
 }
 

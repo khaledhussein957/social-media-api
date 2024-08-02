@@ -2,16 +2,16 @@
 import Post from "./PostSchema.js";
 
 
-  export const createPost = async (content, userID) => {
-    const post = new Post({ content, userID });
+  export const createPost = async (content, authorId) => {
+    const post = new Post({ content, author: authorId });
     return await post.save();  
   }
 
-  export const getUserPost = async (id) => {
-    return await Post.find(id).sort({ createdAt: -1});
+  export const getAuthorPost = async (authorId) => {
+    return await Post.find({ author: authorId }).sort({ createdAt: -1});
   }
 
-  export const getPosts = async () => {
+  export const getAllPosts = async () => {
     return await Post.find().sort({ createdAt: -1 });
   }
 

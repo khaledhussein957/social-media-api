@@ -1,16 +1,26 @@
 import express from 'express';
-import { createPost, getUserPost, getPosts, getPost, updatePost, deletePost } from './PostRepository.js';
+import { createPost, getAuthorPost, getAllPosts, getPost, updatePost, deletePost } from './PostRepository.js';
 
 export const CreatePost = async (req, res) => {
   try {
-    const content = req.body;
-    const userID = req.cookies.userID;
+    const token = req.cookies.author;
+      console.log('Token:', token);
+  
+      if (!token) {
+        return res.status(401).json('missed Unauthorized');
+      }
+  
+      console.log('Secret Key:', process.env.SECRET_KEY);
+      const decoded = jwt.verify(token, process.env.SECRET_KEY);
+      const authorId = decoded.userId;
+  
+      const author = await getUserById(authorId);
+      if (!author) {
+        return res.status(404).json( 'User not found' );
+      }
+      const content = req.body;
 
-    if (!userID) {
-      return res.status(401).json({ message: "Unauthorized" });
-    }
-
-    const post = await createPost(content, userID);
+    const post = await createPost(content, author);
 
     res.status(201).json(post);
   } catch (error) {
@@ -18,14 +28,10 @@ export const CreatePost = async (req, res) => {
   }
 }
 
-export const GetUserPost = async (req, res) => {
+export const GetAuthorPost = async (req, res) => {
+  const { authorId } = req.params;
   try {
-    const posts = await getUserPost({userID: req.cookies.userID})
-    .populate({
-      path: 'userID',
-      model: 'User',
-      select: 'firstName lastName email'
-    });
+    const posts = await getAuthorPost(authorId);
 
     res.status(201).json(posts);
 
@@ -37,10 +43,10 @@ export const GetUserPost = async (req, res) => {
 
 export const GetPosts = async (req, res) => {
   try {
-    const posts = await getPosts();
+    const posts = await getAllPosts();
     res.status(200).json(posts);
   } catch (error) {
-    res.status(500).json({ message: "Error getting posts" });
+    res.status(500).json( "Error getting posts" );
   }
 }
 
@@ -67,6 +73,6 @@ export const DeletePost = async (req, res) => {
     await deletePost(req.params.id);
     res.status(204).json({ message: "Post deleted" });
   } catch (error) {
-    res.status(404).json({ message: "Post not found" });
+    res.status(404).json({ error: "Post not found" });
   }
 }

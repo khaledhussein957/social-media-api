@@ -16,7 +16,7 @@ app.use(cookieParser());
 
 
 app.use("/api" , userRoute);
-app.use("/api", jwtAuth , postRoute);
+app.use("/api" , jwtAuth, postRoute);
 app.use("/api", jwtAuth , commentRoute);
 app.use("/api", jwtAuth , friendshipRoute);
 
