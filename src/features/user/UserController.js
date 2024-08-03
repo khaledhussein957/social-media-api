@@ -158,7 +158,21 @@ dotenv.config();
   // update profile
   export const updateProfile = async (req, res) => {
     try {
-      const user = await updateUser(req.user.userId, req.body);
+      const updateUser = req.body;
+      const token = req.user.author;
+      console.log('Token:', token);
+  
+      if (!token) {
+        return res.status(401).json('Unauthorized');
+      }
+      const decoded = jwt.verify(token, process.env.SECRET_KEY);
+      const userId = decoded.userId;
+  
+      const author = await getUserById(userId);
+      if (!author) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+      const user = await updateUser(author, updateUser);
       res.send(user);
     } catch (error) {
       res.status(400).send(error.message);
@@ -168,7 +182,22 @@ dotenv.config();
   // delete profile
   export const deleteProfile = async (req, res) => {
     try {
-      await deleteUser(req.user.userId);
+      const token = req.cookies.author;
+      console.log('Token:', token);
+  
+      if (!token) {
+        return res.status(401).json('Unauthorized');
+      }
+  
+      console.log('Secret Key:', process.env.SECRET_KEY);
+      const decoded = jwt.verify(token, process.env.SECRET_KEY);
+      const userId = decoded.userId;
+  
+      const user = await getUserById(userId);
+      if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+      await deleteUser(user);
       res.json({ message: "User deleted successfully" });
     } catch (error) {
       res.status(400).send(error.message);

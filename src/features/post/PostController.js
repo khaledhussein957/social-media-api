@@ -2,25 +2,21 @@ import express from 'express';
 import { createPost, getAuthorPost, getAllPosts, getPost, updatePost, deletePost } from './PostRepository.js';
 
 export const CreatePost = async (req, res) => {
-  try {
-    const token = req.cookies.author;
-      console.log('Token:', token);
-  
-      if (!token) {
-        return res.status(401).json('missed Unauthorized');
-      }
-  
-      console.log('Secret Key:', process.env.SECRET_KEY);
-      const decoded = jwt.verify(token, process.env.SECRET_KEY);
-      const authorId = decoded.userId;
-  
-      const author = await getUserById(authorId);
-      if (!author) {
-        return res.status(404).json( 'User not found' );
-      }
-      const content = req.body;
 
-    const post = await createPost(content, author);
+    const currentUser = req.user._id;
+    console.log(currentUser);
+
+    if (!currentUser) {
+      return res.status(401).send('Unauthorized: Missing user');
+    }
+    const { content } = req.body;
+
+
+    try {
+    const post = await createPost({
+      content : content,
+      author : currentUser
+    });
 
     res.status(201).json(post);
   } catch (error) {
@@ -29,9 +25,11 @@ export const CreatePost = async (req, res) => {
 }
 
 export const GetAuthorPost = async (req, res) => {
-  const { authorId } = req.params;
+  const authorId = req.user._id;
   try {
-    const posts = await getAuthorPost(authorId);
+    const posts = await getAuthorPost({
+      author: authorId
+    });
 
     res.status(201).json(posts);
 

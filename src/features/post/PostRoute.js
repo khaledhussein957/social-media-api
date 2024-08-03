@@ -11,7 +11,7 @@ router.post("/posts/create-post", CreatePost);
 // get all posts
 router.get("/posts/all-posts", GetPosts);
 // get user posts
-router.get("/posts/:authorId", GetAuthorPost);
+router.get("/posts/get-user-posts", GetAuthorPost);
 // get post by id
 router.get("/posts/:id", GetPost);
 // update post

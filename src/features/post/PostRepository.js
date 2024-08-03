@@ -8,7 +8,13 @@ import Post from "./PostSchema.js";
   }
 
   export const getAuthorPost = async (authorId) => {
-    return await Post.find({ author: authorId }).sort({ createdAt: -1});
+    return await Post.find({ author: authorId })
+    .populate({
+      path: "author",
+      model: "User",
+      select: "username email"
+    })
+    .sort({ createdAt: -1});
   }
 
   export const getAllPosts = async () => {
